@@ -199,4 +199,16 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: $color-accent-hover;
     }
   }
+  .forum-message--system {
+    align-self: center;
+
+    .forum-message-text {
+      background-color: transparent;
+      border: none;
+      color: $color-text-muted;
+      font-size: 0.8rem;
+      font-style: italic;
+      padding: 0;
+    }
+  }
 }
