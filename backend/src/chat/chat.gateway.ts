@@ -24,7 +24,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server: Server;
 
-    private connectedUsers: Map<string, string> = new Map(); // socketId -> username
+    // socketId -> username
+    private connectedUsers: Map<string, string> = new Map();
 
     handleConnection(client: Socket) {
         console.log(`Client connected: ${client.id}`);
@@ -34,8 +35,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const username = this.connectedUsers.get(client.id);
         if (username) {
             this.connectedUsers.delete(client.id);
-            this.server.emit('userLeft', { username });
-            this.server.emit('onlineUsers', Array.from(this.connectedUsers.values()));
+
+            // Only broadcast userLeft if this username has no other active sockets
+            const stillConnected = Array.from(this.connectedUsers.values()).includes(username);
+            if (!stillConnected) {
+                this.server.emit('userLeft', { username });
+            }
+
+            this.server.emit('onlineUsers', this.getUniqueUsers());
         }
         console.log(`Client disconnected: ${client.id}`);
     }
@@ -46,15 +53,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         @ConnectedSocket() client: Socket,
     ) {
         this.connectedUsers.set(client.id, username);
-        this.server.emit('userJoined', { username });
-        this.server.emit('onlineUsers', Array.from(this.connectedUsers.values()));
+
+        // Only broadcast userJoined if this is their first active socket
+        const socketsForUser = Array.from(this.connectedUsers.values()).filter(u => u === username);
+        if (socketsForUser.length === 1) {
+            this.server.emit('userJoined', { username });
+        }
+
+        this.server.emit('onlineUsers', this.getUniqueUsers());
     }
 
     @SubscribeMessage('message')
-    handleMessage(
-        @MessageBody() message: Message,
-        @ConnectedSocket() client: Socket,
-    ) {
-        this.server.emit('message', message); // broadcast to all
+    handleMessage(@MessageBody() message: Message) {
+        this.server.emit('message', message);
+    }
+
+    private getUniqueUsers(): string[] {
+        return [...new Set(this.connectedUsers.values())];
     }
 }
