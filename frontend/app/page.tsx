@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Background from './components/BackgroundSpheres';
 
 export default function Home() {
     return (
         <main>
-
+            <Background />
             <header>
                 <nav>
                     <ul>
@@ -16,22 +17,22 @@ export default function Home() {
             </header>
 
             <section id="hero">
-                <h1>Game Title</h1>
-                <p>A short, punchy tagline for the game.</p>
+                <h1>Orb Combat</h1>
+                <p>Fight using bouncing balls!</p>
                 <a href="#download">Download Now</a>
             </section>
 
             <section id="about">
                 <h2>About the Game</h2>
-                <p>A brief description of the game — what it is, what makes it fun, who it's for.</p>
+                <p>Orb Combat is a physics-based battle simulator where different types of orbs fight each other in an arena. Each orb has unique abilities — fire orbs inflict stacking burn damage, ice orbs freeze their targets in place, slime orbs split into smaller versions of themselves on death, and sword orbs wield a spinning blade that knocks enemies away. Choose your fighters and watch the chaos unfold.</p>
             </section>
 
             <section id="features">
                 <h2>Features</h2>
                 <ul>
-                    <li>Feature one</li>
-                    <li>Feature two</li>
-                    <li>Feature three</li>
+                    <li>Custom Combat — choose your fighters from a roster of unique orbs and watch them battle it out in the arena</li>
+                    <li>Unique Abilities — each orb comes with its own special ability, from stacking burn damage to freezing enemies solid</li>
+                    <li>Dynamic Physics — orbs bounce, collide and interact with each other in real time with unpredictable results every match</li>
                 </ul>
             </section>
 
@@ -55,7 +56,7 @@ export default function Home() {
             </section>
 
             <footer>
-                <p>&copy; 2026 Game Studio. All rights reserved.</p>
+                <p>&copy; 2026 OrbCombat. All rights reserved.</p>
                 <nav>
                     <a href="/privacy">Privacy Policy</a>
                     <a href="/terms">Terms of Service</a>
