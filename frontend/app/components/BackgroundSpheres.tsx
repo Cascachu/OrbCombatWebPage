@@ -8,14 +8,26 @@ type Sphere = {
     vx: number;
     vy: number;
     radius: number;
-    color: string;
+    spriteIndex: number;
 };
 
-const COLORS = [
-    '#e63946', '#457b9d', '#2a9d8f', '#e9c46a',
-    '#f4a261', '#a8dadc', '#6a4c93', '#ffffff',
-];
-const SPHERE_COUNT = 12;
+const SPRITE_COUNT = 7;
+const SPRITES: HTMLImageElement[] = [];
+
+// Preload all orb sprites from public/sprites/
+function loadSprites(): Promise<void[]> {
+    return Promise.all(
+        Array.from({ length: SPRITE_COUNT }, (_, i) => {
+            return new Promise<void>((resolve) => {
+                const img = new Image();
+                img.src = `/sprites/orb${i + 1}.svg`;
+                img.onload = () => resolve();
+                SPRITES[i] = img;
+            });
+        })
+    );
+}
+const SPHERE_COUNT = 12
 const MIN_RADIUS = 20;
 const MAX_RADIUS = 50;
 const SPEED = 2;
@@ -25,12 +37,10 @@ function randomBetween(a: number, b: number) {
     return a + Math.random() * (b - a);
 }
 
-// Returns a small random value in [-RANDOMNESS, RANDOMNESS]
 function randomJitter(): number {
     return (Math.random() - 0.5) * 2 * RANDOMNESS;
 }
 
-// Spawns spheres without overlapping by retrying placement up to 50 times each
 function createSpheres(width: number, height: number): Sphere[] {
     const spheres: Sphere[] = [];
 
@@ -47,7 +57,7 @@ function createSpheres(width: number, height: number): Sphere[] {
                 vx: Math.cos(angle) * SPEED,
                 vy: Math.sin(angle) * SPEED,
                 radius,
-                color: COLORS[i % COLORS.length],
+                spriteIndex: i % SPRITE_COUNT,
             };
             attempts++;
         } while (
@@ -65,7 +75,6 @@ function createSpheres(width: number, height: number): Sphere[] {
     return spheres;
 }
 
-// Rotates a velocity vector by a given angle (used for post-bounce jitter)
 function rotateVelocity(vx: number, vy: number, angle: number): [number, number] {
     return [
         vx * Math.cos(angle) - vy * Math.sin(angle),
@@ -84,40 +93,33 @@ function resolveCollision(a: Sphere, b: Sphere) {
     const nx = dx / dist;
     const ny = dy / dist;
 
-    // Separate overlapping spheres evenly
     const overlap = (minDist - dist) / 2;
     a.x -= nx * overlap;
     a.y -= ny * overlap;
     b.x += nx * overlap;
     b.y += ny * overlap;
 
-    // Swap velocity components along the collision normal (equal mass elastic collision)
     const aVnormal = a.vx * nx + a.vy * ny;
     const bVnormal = b.vx * nx + b.vy * ny;
 
-    // Only resolve if moving toward each other
     if (aVnormal - bVnormal <= 0) return;
 
-    // Subtract old normal component, add the other sphere's normal component
     a.vx += (bVnormal - aVnormal) * nx;
     a.vy += (bVnormal - aVnormal) * ny;
     b.vx += (aVnormal - bVnormal) * nx;
     b.vy += (aVnormal - bVnormal) * ny;
 
-    // Add slight jitter to tangential axis so repeated collisions don't lock up
     const jitterA = randomJitter();
     const jitterB = randomJitter();
     ;[a.vx, a.vy] = rotateVelocity(a.vx, a.vy, jitterA);
     ;[b.vx, b.vy] = rotateVelocity(b.vx, b.vy, jitterB);
 
-    // Clamp speed back to SPEED after jitter
     const speedA = Math.sqrt(a.vx * a.vx + a.vy * a.vy);
     const speedB = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
     if (speedA > 0) { a.vx = (a.vx / speedA) * SPEED; a.vy = (a.vy / speedA) * SPEED; }
     if (speedB > 0) { b.vx = (b.vx / speedB) * SPEED; b.vy = (b.vy / speedB) * SPEED; }
 }
 
-// Reflects velocity off walls and adds jitter to the parallel axis, then clamps speed back to SPEED
 function bounceOffWall(sphere: Sphere, width: number, height: number) {
     if (sphere.x - sphere.radius <= 0) {
         sphere.x = sphere.radius;
@@ -139,12 +141,82 @@ function bounceOffWall(sphere: Sphere, width: number, height: number) {
         sphere.vx += randomJitter();
     }
 
-    // Clamp speed so jitter doesn't accumulate over time
     const speed = Math.sqrt(sphere.vx * sphere.vx + sphere.vy * sphere.vy);
     if (speed > 0) {
         sphere.vx = (sphere.vx / speed) * SPEED;
         sphere.vy = (sphere.vy / speed) * SPEED;
     }
+}
+
+// Reads all .orb-barrier elements and bounces spheres off their bounding boxes
+function bounceOffBarriers(sphere: Sphere) {
+    const barriers = document.querySelectorAll('.orb-barrier');
+
+    barriers.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+
+        // Expand rect by sphere radius so we treat the sphere as a point
+        const left = rect.left + sphere.radius;
+        const right = rect.right - sphere.radius;
+        const top = rect.top + sphere.radius;
+        const bottom = rect.bottom - sphere.radius;
+
+        // Check if sphere center is inside the expanded rect
+        if (sphere.x < rect.left - sphere.radius || sphere.x > rect.right + sphere.radius) return;
+        if (sphere.y < rect.top - sphere.radius || sphere.y > rect.bottom + sphere.radius) return;
+
+        const closestX = Math.max(rect.left, Math.min(sphere.x, rect.right));
+        const closestY = Math.max(rect.top, Math.min(sphere.y, rect.bottom));
+
+        const dx = sphere.x - closestX;
+        const dy = sphere.y - closestY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist >= sphere.radius || dist === 0) {
+            // Sphere center is inside the rect — find nearest edge and eject
+            const distLeft = Math.abs(sphere.x - rect.left);
+            const distRight = Math.abs(sphere.x - rect.right);
+            const distTop = Math.abs(sphere.y - rect.top);
+            const distBottom = Math.abs(sphere.y - rect.bottom);
+            const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+
+            if (minDist === distLeft) {
+                sphere.x = rect.left - sphere.radius;
+                sphere.vx = -Math.abs(sphere.vx);
+            } else if (minDist === distRight) {
+                sphere.x = rect.right + sphere.radius;
+                sphere.vx = Math.abs(sphere.vx);
+            } else if (minDist === distTop) {
+                sphere.y = rect.top - sphere.radius;
+                sphere.vy = -Math.abs(sphere.vy);
+            } else {
+                sphere.y = rect.bottom + sphere.radius;
+                sphere.vy = Math.abs(sphere.vy);
+            }
+            return;
+        }
+
+        // Normal case — push sphere out along collision normal
+        const nx = dx / dist;
+        const ny = dy / dist;
+        const overlap = sphere.radius - dist;
+
+        sphere.x += nx * overlap;
+        sphere.y += ny * overlap;
+
+        const dot = sphere.vx * nx + sphere.vy * ny;
+        sphere.vx -= 2 * dot * nx;
+        sphere.vy -= 2 * dot * ny;
+
+        sphere.vx += randomJitter();
+        sphere.vy += randomJitter();
+
+        const speed = Math.sqrt(sphere.vx * sphere.vx + sphere.vy * sphere.vy);
+        if (speed > 0) {
+            sphere.vx = (sphere.vx / speed) * SPEED;
+            sphere.vy = (sphere.vy / speed) * SPEED;
+        }
+    });
 }
 
 export default function BouncingSpheres() {
@@ -171,14 +243,13 @@ export default function BouncingSpheres() {
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Move all spheres then resolve wall bounces
             for (const sphere of spheres) {
                 sphere.x += sphere.vx;
                 sphere.y += sphere.vy;
                 bounceOffWall(sphere, canvas.width, canvas.height);
+                bounceOffBarriers(sphere);
             }
 
-            // Multiple passes to settle overlaps before drawing
             for (let pass = 0; pass < 3; pass++) {
                 for (let i = 0; i < spheres.length; i++) {
                     for (let j = i + 1; j < spheres.length; j++) {
@@ -188,18 +259,19 @@ export default function BouncingSpheres() {
             }
 
             for (const sphere of spheres) {
-                ctx.beginPath();
-                ctx.arc(sphere.x, sphere.y, sphere.radius, 0, Math.PI * 2);
-                ctx.fillStyle = sphere.color;
-                ctx.fill();
+                const img = SPRITES[sphere.spriteIndex];
+                const d = sphere.radius * 2;
+                ctx.drawImage(img, sphere.x - sphere.radius, sphere.y - sphere.radius, d, d);
             }
 
             animationId = requestAnimationFrame(draw);
         }
-        resize();
-        draw();
 
-        // Respawn spheres on resize to fit new dimensions
+        loadSprites().then(() => {
+            resize();
+            draw();
+        });
+
         window.addEventListener('resize', resize);
         return () => {
             window.removeEventListener('resize', resize);

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="128.0px"
+   height="128.0px"
+   viewBox="0 0 128.0 128.0"
+   version="1.1"
+   id="SVGRoot"
+   sodipodi:docname="SwordOrb.svg"
+   xml:space="preserve"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview5324"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     showgrid="true"
+     inkscape:zoom="4"
+     inkscape:cx="52.375"
+     inkscape:cy="56.5"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"><inkscape:grid
+       type="xygrid"
+       id="grid5447" /></sodipodi:namedview><defs
+     id="defs5319"><linearGradient
+       inkscape:collect="always"
+       id="linearGradient10809"><stop
+         style="stop-color:#d9d9d9;stop-opacity:1;"
+         offset="0"
+         id="stop10805" /><stop
+         style="stop-color:#656565;stop-opacity:1;"
+         offset="1"
+         id="stop10807" /></linearGradient><style
+       id="style1294">
+
+      .cls-3 {
+        fill: url(#linear-gradient-1);
+      }
+
+      .cls-4 {
+        fill: #fc9502;
+      }
+
+      .cls-5 {
+        fill: #fce202;
+      }
+    </style><linearGradient
+       id="linear-gradient-1"
+       gradientUnits="userSpaceOnUse"
+       x1="94.141"
+       y1="255"
+       x2="94.141"
+       y2="0.188"
+       gradientTransform="translate(-1.280071,0.47343624)"><stop
+         offset="0"
+         stop-color="#ff4c0d"
+         id="stop1296" /><stop
+         offset="1"
+         stop-color="#fc9502"
+         id="stop1298" /></linearGradient><filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Cross Blur"
+       id="filter6033"
+       x="-0.023484329"
+       y="-0.023484329"
+       width="1.0469687"
+       height="1.0469687"><feColorMatrix
+         in="SourceGraphic"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -0.2125 -0.7154 -0.0721 1 0 "
+         result="colormatrix"
+         id="feColorMatrix6023" /><feComposite
+         in="SourceGraphic"
+         in2="colormatrix"
+         operator="arithmetic"
+         k2="1"
+         k3="0"
+         k4="0"
+         result="composite"
+         id="feComposite6025" /><feGaussianBlur
+         stdDeviation="5 0.01"
+         result="blur1"
+         id="feGaussianBlur6027" /><feGaussianBlur
+         in="composite"
+         stdDeviation="0.01 5"
+         result="blur2"
+         id="feGaussianBlur6029" /><feBlend
+         in="blur2"
+         in2="blur1"
+         mode="darken"
+         result="blend"
+         id="feBlend6031" /></filter><clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1075"><ellipse
+         style="fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:3.79318;stroke-dasharray:none;stroke-opacity:1"
+         id="ellipse1077"
+         cx="63.945835"
+         cy="64.001526"
+         rx="60.017738"
+         ry="60.089058" /></clipPath><radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient10809"
+       id="radialGradient10811"
+       cx="64"
+       cy="64"
+       fx="64"
+       fy="64"
+       r="63.999998"
+       gradientUnits="userSpaceOnUse" /></defs><g
+     inkscape:label="Base"
+     inkscape:groupmode="layer"
+     id="layer1"><circle
+       style="fill:url(#radialGradient10811);fill-opacity:1;stroke:#000000;stroke-width:3.91869;stroke-dasharray:none;stroke-opacity:1"
+       id="path357"
+       cx="64"
+       cy="64"
+       r="62.040653" /></g><g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Face"><text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.058;stroke-dasharray:none;stroke-opacity:1"
+       x="57.805981"
+       y="54.270447"
+       id="text6017"><tspan
+         sodipodi:role="line"
+         id="tspan6015"
+         x="57.805981"
+         y="54.270447" /></text><text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Arial;-inkscape-font-specification:Arial;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.058;stroke-dasharray:none;stroke-opacity:1"
+       x="60.104076"
+       y="48.260036"
+       id="text6021"><tspan
+         sodipodi:role="line"
+         id="tspan6019"
+         x="60.104076"
+         y="48.260036" /></text><rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.78594;stroke-dasharray:none;stroke-opacity:1"
+       id="rect7531"
+       width="63.122723"
+       height="13.258167"
+       x="11.683712"
+       y="46.002136"
+       ry="0"
+       transform="matrix(0.96076143,0.27737605,-0.15381952,0.98809896,0,0)" /><rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.78588;stroke-dasharray:none;stroke-opacity:1"
+       id="rect7531-5"
+       width="63.122551"
+       height="13.258005"
+       x="-115.94571"
+       y="81.829773"
+       ry="0"
+       transform="matrix(-0.96076218,0.27737344,0.153821,0.98809873,0,0)" /><rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.9253;stroke-dasharray:none;stroke-opacity:1"
+       id="rect8788"
+       width="22.550863"
+       height="50.455563"
+       x="52.724564"
+       y="72.170502" /></g><style
+     type="text/css"
+     id="style4669">
+	.st0{fill:#000000;}
+</style><style
+     type="text/css"
+     id="style8998">
+<![CDATA[
+	.st0{fill:#000000;}
+]]>
+</style></svg>

@@ -18,6 +18,7 @@ body {
   background-color: $color-bg;
   color: $color-text;
   line-height: 1.6;
+
 }
 
 a {
@@ -26,6 +27,7 @@ a {
 }
 
 main {
+  z-index: 1;
   display: flex;
   flex-direction: column;
 }
@@ -33,7 +35,8 @@ main {
 header {
   position: sticky;
   top: 0;
-  background-color: rgba(10, 10, 10, 0.9);
+  background-color: rgba(26,0,0,0.55);
+  border-bottom: 4px solid rgba(26,0,0,1);
   backdrop-filter: blur(8px);
   padding: 16px 20px;
   z-index: 100;
@@ -64,7 +67,7 @@ header {
   justify-content: center;
   text-align: center;
   padding: 160px 20px;
-  background: linear-gradient(180deg, rgba(26,0,0,0.85) 0%, rgba(10,10,10,0.85) 100%);
+
 
   h1 {
     font-size: 4rem;
@@ -203,5 +206,24 @@ footer {
         color: $color-text;
       }
     }
+  }
+}
+#background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(180deg, rgba(26,0,0,0.55) 0%, rgba(10,10,10,0.55) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.orb-barrier {
+  &:not(header):not(footer) {
+    margin-bottom: 100px;
+    border: 5px solid white;
+    border-radius: 25px;
   }
 }

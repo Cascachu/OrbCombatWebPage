@@ -5,7 +5,9 @@ export default function Home() {
     return (
         <main>
             <Background />
-            <header>
+            <div id="background-overlay" />
+
+            <header className="orb-barrier">
                 <nav>
                     <ul>
                         <li><a href="#about">About</a></li>
@@ -22,12 +24,12 @@ export default function Home() {
                 <a href="#download">Download Now</a>
             </section>
 
-            <section id="about">
+            <section id="about" className="orb-barrier">
                 <h2>About the Game</h2>
                 <p>Orb Combat is a physics-based battle simulator where different types of orbs fight each other in an arena. Each orb has unique abilities — fire orbs inflict stacking burn damage, ice orbs freeze their targets in place, slime orbs split into smaller versions of themselves on death, and sword orbs wield a spinning blade that knocks enemies away. Choose your fighters and watch the chaos unfold.</p>
             </section>
 
-            <section id="features">
+            <section id="features" className="orb-barrier">
                 <h2>Features</h2>
                 <ul>
                     <li>Custom Combat — choose your fighters from a roster of unique orbs and watch them battle it out in the arena</li>
@@ -36,7 +38,7 @@ export default function Home() {
                 </ul>
             </section>
 
-            <section id="screenshots">
+            <section id="screenshots" className="orb-barrier">
                 <h2>Screenshots</h2>
                 <div>
                     <img src="/screenshots/screen1.png" alt="Screenshot 1" />
@@ -45,7 +47,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <section id="download">
+            <section id="download" className="orb-barrier">
                 <h2>Download</h2>
                 <p>Available for Windows, macOS, and Linux.</p>
                 <div>
