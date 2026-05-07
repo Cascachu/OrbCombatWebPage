@@ -9,9 +9,15 @@ type Message = {
     username: string;
     text: string;
     timestamp: string;
+    avatar?: string;
 };
 
 type AuthMode = 'login' | 'register';
+
+type OnlineUser = {
+    username: string;
+    avatar?: string;
+};
 
 let socket: Socket;
 
@@ -34,8 +40,10 @@ export default function Forum() {
     const [authError, setAuthError] = useState('');
 
     const [messages, setMessages] = useState<Message[]>([]);
-    const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+    const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
     const [text, setText] = useState('');
+    const [selectedAvatar, setSelectedAvatar] = useState('default.svg');
+    const [availableAvatars, setAvailableAvatars] = useState<string[]>([]);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -43,7 +51,19 @@ export default function Forum() {
         if (stored) {
             const name = parseUsername(stored);
             if (name) setUsername(name);
+
+            fetch('http://localhost:4000/users/profile', {
+                headers: { Authorization: `Bearer ${stored}` },
+            })
+                .then(res => res.json())
+                .then(data => setSelectedAvatar(data.avatar || 'default.svg'))
+                .catch(console.error);
         }
+
+        fetch('http://localhost:4000/auth/avatars')
+            .then(res => res.json())
+            .then(data => setAvailableAvatars(data))
+            .catch(console.error);
     }, []);
 
     useEffect(() => {
@@ -98,7 +118,10 @@ export default function Forum() {
             email: formEmail,
             password: formPassword,
         };
-        if (authMode === 'register') body.username = formUsername;
+        if (authMode === 'register') {
+            body.username = formUsername;
+            body.avatar = selectedAvatar;
+        }
 
         try {
             const res = await fetch(url, {
@@ -116,6 +139,14 @@ export default function Forum() {
 
             localStorage.setItem('token', data.access_token);
             setUsername(data.username);
+
+            const profileRes = await fetch('http://localhost:4000/users/profile', {
+                headers: { Authorization: `Bearer ${data.access_token}` },
+            });
+            if (profileRes.ok) {
+                const profileData = await profileRes.json();
+                setSelectedAvatar(profileData.avatar || 'default.svg');
+            }
         } catch {
             setAuthError('Could not connect to the server');
         }
@@ -169,12 +200,28 @@ export default function Forum() {
                         </div>
 
                         {authMode === 'register' && (
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={formUsername}
-                                onChange={(e) => setFormUsername(e.target.value)}
-                            />
+                            <>
+                                <input
+                                    type="text"
+                                    placeholder="Username"
+                                    value={formUsername}
+                                    onChange={(e) => setFormUsername(e.target.value)}
+                                />
+                                <div className="forum-avatar-selector">
+                                    <p>Choose Avatar:</p>
+                                    <div className="forum-avatar-grid">
+                                        {availableAvatars.map((avatar) => (
+                                            <img
+                                                key={avatar}
+                                                src={`/avatars/${avatar}`}
+                                                alt={avatar}
+                                                className={`forum-avatar-option ${selectedAvatar === avatar ? 'selected' : ''}`}
+                                                onClick={() => setSelectedAvatar(avatar)}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
                         )}
                         <input
                             type="email"
@@ -216,8 +263,11 @@ export default function Forum() {
                     <h2>Online ({onlineUsers.length})</h2>
                     <ul>
                         {onlineUsers.map((user) => (
-                            <li key={user} className={user === username ? 'forum-sidebar-you' : ''}>
-                                {user} {user === username ? '(you)' : ''}
+                            <li key={user.username} className={user.username === username ? 'forum-sidebar-you' : ''}>
+                                {user.avatar && (
+                                    <img src={`/avatars/${user.avatar}`} alt={user.username} className="forum-sidebar-avatar" />
+                                )}
+                                <span>{user.username} {user.username === username ? '(you)' : ''}</span>
                             </li>
                         ))}
                     </ul>
@@ -233,13 +283,22 @@ export default function Forum() {
                                 key={msg.id}
                                 className={`forum-message ${msg.username === username ? 'forum-message--own' : ''} ${msg.username === 'System' ? 'forum-message--system' : ''}`}
                             >
-                                {msg.username !== 'System' && (
-                                    <span className="forum-message-username">{msg.username}</span>
-                                )}
-                                <span className="forum-message-text">{msg.text}</span>
-                                {msg.username !== 'System' && (
-                                    <span className="forum-message-time">{msg.timestamp}</span>
-                                )}
+                                <div className="forum-message-content">
+                                    {msg.username !== 'System' && msg.avatar && (
+                                        <div className="forum-message-avatar-container">
+                                            <img src={`/avatars/${msg.avatar}`} alt={msg.username} className="forum-message-avatar" />
+                                            {msg.username !== 'System' && (
+                                                <span className="forum-message-username">{msg.username}</span>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div className="forum-message-body">
+                                        <span className="forum-message-text">{msg.text}</span>
+                                        {msg.username !== 'System' && (
+                                            <span className="forum-message-time">{msg.timestamp}</span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         ))}
                         <div ref={bottomRef} />

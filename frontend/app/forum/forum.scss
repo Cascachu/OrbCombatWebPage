@@ -78,6 +78,9 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     li {
       font-size: 0.9rem;
       color: $color-text-muted;
+      display: flex;
+      align-items: center;
+      gap: 8px;
 
       &::before {
         content: '● ';
@@ -90,6 +93,14 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 .forum-sidebar-you {
   color: $color-accent !important;
+}
+
+.forum-sidebar-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid $color-border;
+  flex-shrink: 0;
 }
 
 .forum-chat {
@@ -134,13 +145,41 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     .forum-message-text {
       background-color: $color-accent;
     }
+
+    .forum-message-content {
+      flex-direction: row-reverse;
+    }
   }
+}
+
+.forum-message-content {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.forum-message-avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.forum-message-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .forum-message-username {
   font-size: 0.75rem;
   color: $color-text-muted;
   font-weight: 600;
+  text-align: center;
+  max-width: 40px;
+  word-break: break-word;
 }
 
 .forum-message-text {
@@ -314,4 +353,47 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     border-color: $color-accent;
     color: $color-text;
   }
+}
+
+.forum-avatar-selector {
+  padding: 12px 0;
+
+  p {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin-bottom: 8px;
+  }
+}
+
+.forum-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.forum-avatar-option {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $color-accent;
+    transform: scale(1.05);
+  }
+
+  &.selected {
+    border-color: $color-accent;
+    box-shadow: 0 0 8px $color-accent;
+  }
+}
+
+.forum-message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid $color-border;
+  flex-shrink: 0;
 }

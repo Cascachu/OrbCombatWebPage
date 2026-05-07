@@ -10,7 +10,7 @@ export class AuthService {
         private jwtService: JwtService,
     ) {}
 
-    async register(username: string, email: string, password: string) {
+    async register(username: string, email: string, password: string, avatar?: string) {
         const existingEmail = await this.usersService.findByEmail(email);
         if (existingEmail) throw new ConflictException('Email already in use');
 
@@ -18,7 +18,7 @@ export class AuthService {
         if (existingUsername) throw new ConflictException('Username already in use');
 
         const hashed = await bcrypt.hash(password, 10);
-        const user = await this.usersService.create(username, email, hashed);
+        const user = await this.usersService.create(username, email, hashed, avatar || 'default.svg');
 
         return this.signToken(user.id, user.username);
     }
