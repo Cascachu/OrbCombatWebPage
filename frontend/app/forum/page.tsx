@@ -39,6 +39,7 @@ export default function Forum() {
     const AVATARS = ['avatar1.svg', 'avatar2.svg', 'avatar3.svg', 'avatar4.svg', 'avatar5.svg', 'avatar6.svg', 'default.svg'];
     const [username, setUsername] = useState<string | null>(null);
     const [authMode, setAuthMode] = useState<AuthMode>('login');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const [formEmail, setFormEmail] = useState('');
     const [formUsername, setFormUsername] = useState('');
@@ -50,6 +51,8 @@ export default function Forum() {
     const [text, setText] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState('default.svg');
     const bottomRef = useRef<HTMLDivElement>(null);
+    const touchStartX = useRef<number>(0);
+    const touchStartY = useRef<number>(0);
 
     useEffect(() => {
         const stored = localStorage.getItem('token');
@@ -64,10 +67,6 @@ export default function Forum() {
                 .then(data => setSelectedAvatar(data.avatar || 'default.svg'))
                 .catch(console.error);
         }
-
-        fetch(`${API_URL}/auth/avatars`)
-            .then(res => res.json())
-            .catch(console.error);
     }, []);
 
     useEffect(() => {
@@ -253,7 +252,22 @@ export default function Forum() {
     }
 
     return (
-        <main className="forum-page">
+        <main
+            className="forum-page"
+            onTouchStart={(e) => {
+                touchStartX.current = e.touches[0].clientX;
+                touchStartY.current = e.touches[0].clientY;
+            }}
+            onTouchEnd={(e) => {
+                const dx = e.changedTouches[0].clientX - touchStartX.current;
+                const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
+
+                if (dy > 50) return;
+
+                if (dx > 60) setSidebarOpen(true);
+                if (dx < -60) setSidebarOpen(false);
+            }}
+        >
             <header className="forum-header">
                 <a href="/" className="forum-back">← Back</a>
                 <h1>Community Forum</h1>
@@ -263,7 +277,7 @@ export default function Forum() {
 
             <div className="forum-container">
                 {/* Sidebar */}
-                <aside className="forum-sidebar">
+                <aside className={`forum-sidebar ${sidebarOpen ? 'forum-sidebar--open' : ''}`}>
                     <h2>Online ({onlineUsers.length})</h2>
                     <ul>
                         {onlineUsers.map((user) => (
@@ -276,6 +290,11 @@ export default function Forum() {
                         ))}
                     </ul>
                 </aside>
+
+                {/* Overlay that closes sidebar when tapped */}
+                {sidebarOpen && (
+                    <div className="forum-sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+                )}
 
                 {/* Chat area */}
                 <div className="forum-chat">

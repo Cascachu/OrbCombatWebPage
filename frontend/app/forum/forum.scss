@@ -66,10 +66,7 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex: 1;
   overflow: hidden;
 
-  // On mobile stack sidebar above chat
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
+
 }
 
 .forum-sidebar {
@@ -117,32 +114,6 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
   }
 
-  // On mobile sidebar becomes a horizontal strip at the top
-  @media (max-width: 768px) {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid $color-border;
-    padding: 10px 16px;
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    h2 {
-      display: none;
-    }
-
-    ul {
-      flex-direction: row;
-      gap: 12px;
-
-      li {
-        flex-shrink: 0;
-
-        &::before {
-          display: none;
-        }
-      }
-    }
-  }
 }
 
 .forum-sidebar-you {
@@ -507,4 +478,31 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border-radius: 50%;
   border: 1px solid $color-border;
   flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .forum-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
+    &--open {
+      transform: translateX(0);
+    }
+  }
+
+  .forum-sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+  }
 }
