@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import './forum.scss';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 type Message = {
     id: number;
@@ -32,6 +31,12 @@ function parseUsername(token: string): string | null {
 }
 
 export default function Forum() {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || (
+        typeof window !== 'undefined'
+            ? `http://${window.location.hostname}:4000`
+            : 'http://localhost:4000'
+    );
+    const AVATARS = ['avatar1.svg', 'avatar2.svg', 'avatar3.svg', 'avatar4.svg', 'avatar5.svg', 'avatar6.svg', 'default.svg'];
     const [username, setUsername] = useState<string | null>(null);
     const [authMode, setAuthMode] = useState<AuthMode>('login');
 
@@ -44,7 +49,6 @@ export default function Forum() {
     const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
     const [text, setText] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState('default.svg');
-    const [availableAvatars, setAvailableAvatars] = useState<string[]>([]);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -53,7 +57,7 @@ export default function Forum() {
             const name = parseUsername(stored);
             if (name) setUsername(name);
 
-            fetch('http://localhost:4000/users/profile', {
+            fetch(`${API_URL}/users/profile`, {
                 headers: { Authorization: `Bearer ${stored}` },
             })
                 .then(res => res.json())
@@ -61,9 +65,8 @@ export default function Forum() {
                 .catch(console.error);
         }
 
-        fetch('http://localhost:4000/auth/avatars')
+        fetch(`${API_URL}/auth/avatars`)
             .then(res => res.json())
-            .then(data => setAvailableAvatars(data))
             .catch(console.error);
     }, []);
 
@@ -141,7 +144,7 @@ export default function Forum() {
             localStorage.setItem('token', data.access_token);
             setUsername(data.username);
 
-            const profileRes = await fetch('http://localhost:4000/users/profile', {
+            const profileRes = await fetch(`${API_URL}/users/profile`, {
                 headers: { Authorization: `Bearer ${data.access_token}` },
             });
             if (profileRes.ok) {
@@ -211,7 +214,7 @@ export default function Forum() {
                                 <div className="forum-avatar-selector">
                                     <p>Choose Avatar:</p>
                                     <div className="forum-avatar-grid">
-                                        {availableAvatars.map((avatar) => (
+                                        {AVATARS.map((avatar) => (
                                             <img
                                                 key={avatar}
                                                 src={`/avatars/${avatar}`}
