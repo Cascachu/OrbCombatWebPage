@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import './forum.scss';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 type Message = {
     id: number;
@@ -69,7 +70,7 @@ export default function Forum() {
     useEffect(() => {
         if (!username) return;
 
-        socket = io('http://localhost:4000');
+        socket = io(API_URL);
 
         socket.on('connect', () => {
             socket.emit('join', username);
@@ -112,7 +113,7 @@ export default function Forum() {
 
     async function handleAuth() {
         setAuthError('');
-        const url = `http://localhost:4000/auth/${authMode}`;
+        const url = `${API_URL}/auth/${authMode}`;
 
         const body: Record<string, string> = {
             email: formEmail,

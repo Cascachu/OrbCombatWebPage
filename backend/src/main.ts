@@ -5,11 +5,11 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: true,
         methods: ['GET', 'POST'],
     });
 
-    await app.listen(4000);
+    await app.listen(4000, '0.0.0.0');
     console.log('Backend running on http://localhost:4000');
 }
 

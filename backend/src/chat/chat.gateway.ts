@@ -19,7 +19,7 @@ type Message = {
 
 @WebSocketGateway({
     cors: {
-        origin: 'http://localhost:3000',
+        origin: true
     },
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
