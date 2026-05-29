@@ -173,6 +173,9 @@ $font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex-direction: column;
   gap: 4px;
   max-width: 60%;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   &--own {
     align-self: flex-end;
