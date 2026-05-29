@@ -19,7 +19,7 @@ A web-based game download and community platform built with Next.js and NestJS.
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. Clone the repo
 ```bash
-git clone https://github.com/yourusername/orbcombat.git
+git clone https://github.com/Cascachu/orbcombat.git
 cd orbcombat
 ```
 3. Copy `.env.example` to `.env` and fill in your values
