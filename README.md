@@ -81,10 +81,10 @@ New-NetFirewallRule -DisplayName "OrbCombat Backend" -Direction Inbound -Protoco
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `DB_USER` | PostgreSQL username |
-| `DB_PASS` | PostgreSQL password |
-| `DB_NAME` | Database name |
-| `JWT_SECRET` | Secret key for signing JWT tokens |
-| `NEXT_PUBLIC_API_URL` | Backend URL (default: `http://localhost:4000`) |
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `DB_USER` | `postgres` | PostgreSQL username |
+| `DB_PASS` | `mypassword` | PostgreSQL password |
+| `DB_NAME` | `orbcombat` | Database name |
+| `JWT_SECRET` | `my_super_secret_key` | Secret key for signing JWT tokens |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:4000` | Backend URL, change to your IP for peer to peer |
