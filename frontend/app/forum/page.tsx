@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import './forum.scss';
+import Link from 'next/link';
 
 type Message = {
     id: number;
@@ -58,7 +59,9 @@ export default function Forum() {
         const stored = localStorage.getItem('token');
         if (stored) {
             const name = parseUsername(stored);
-            if (name) setUsername(name);
+            if (name) {
+                setTimeout(() => setUsername(name), 0);
+            }
 
             fetch(`${API_URL}/users/profile`, {
                 headers: { Authorization: `Bearer ${stored}` },
@@ -82,7 +85,7 @@ export default function Forum() {
             setMessages((prev) => [...prev, message]);
         });
 
-        socket.on('onlineUsers', (users: string[]) => {
+        socket.on('onlineUsers', (users: OnlineUser[]) => {
             setOnlineUsers(users);
         });
 
@@ -181,7 +184,7 @@ export default function Forum() {
         return (
             <main className="forum-page">
                 <header className="forum-header">
-                    <a href="/" className="forum-back">← Back</a>
+                    <Link href="/" className="forum-back">← Back</Link>
                     <h1>Community Forum</h1>
                 </header>
 
@@ -269,7 +272,7 @@ export default function Forum() {
             }}
         >
             <header className="forum-header">
-                <a href="/" className="forum-back">← Back</a>
+                <Link href="/" className="forum-back">← Back</Link>
                 <h1>Community Forum</h1>
                 <span className="forum-online">● Live</span>
                 <button className="forum-logout" onClick={handleLogout}>Logout</button>
