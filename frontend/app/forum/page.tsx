@@ -37,7 +37,7 @@ export default function Forum() {
             ? `http://${window.location.hostname}:4000`
             : 'http://localhost:4000'
     );
-    const AVATARS = ['avatar1.svg', 'avatar2.svg', 'avatar3.svg', 'avatar4.svg', 'avatar5.svg', 'avatar6.svg', 'default.svg'];
+    const AVATARS = ['avatar1.svg', 'avatar2.svg', 'avatar3.svg', 'avatar4.svg', 'avatar5.svg', 'avatar6.svg','avatar7.svg', 'default.svg'];
     const [username, setUsername] = useState<string | null>(null);
     const [authMode, setAuthMode] = useState<AuthMode>('login');
     const [sidebarOpen, setSidebarOpen] = useState(false);

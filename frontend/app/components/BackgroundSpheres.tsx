@@ -11,7 +11,7 @@ type Sphere = {
     spriteIndex: number;
 };
 
-const SPRITE_COUNT = 7;
+const SPRITE_COUNT = 8;
 const SPRITES: HTMLImageElement[] = [];
 
 // Preload all orb sprites from public/sprites/
