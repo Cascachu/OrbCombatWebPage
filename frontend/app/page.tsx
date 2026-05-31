@@ -1,7 +1,12 @@
+'use client';
+
 import Image from "next/image";
 import Background from './components/BackgroundSpheres';
+import { useState } from 'react';
 
 export default function Home() {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
     return (
         <main>
             <Background />
@@ -41,19 +46,25 @@ export default function Home() {
             <section id="screenshots" className="orb-barrier">
                 <h2>Screenshots</h2>
                 <div>
-                    <img src="/screenshots/screen1.png" alt="Screenshot 1" />
-                    <img src="/screenshots/screen2.png" alt="Screenshot 2" />
-                    <img src="/screenshots/screen3.png" alt="Screenshot 3" />
+                    <img src="/screenshots/screen1.png" alt="Screenshot 1" onClick={() => setSelectedImage('/screenshots/screen1.png')} />
+                    <img src="/screenshots/screen2.png" alt="Screenshot 2" onClick={() => setSelectedImage('/screenshots/screen2.png')} />
+                    <img src="/screenshots/screen3.png" alt="Screenshot 3" onClick={() => setSelectedImage('/screenshots/screen3.png')} />
                 </div>
             </section>
 
+            {selectedImage && (
+                <div id="image-modal" onClick={() => setSelectedImage(null)}>
+                    <img src={selectedImage} alt="Enlarged screenshot" />
+                </div>
+            )}
+
             <section id="download" className="orb-barrier">
                 <h2>Download</h2>
-                <p>Available for Windows, macOS, and Linux.</p>
+                <p>Available for Android.</p>
                 <div>
-                    <a href="/downloads/game-windows.exe">Download for Windows</a>
-                    <a href="/downloads/game-mac.dmg">Download for macOS</a>
-                    <a href="/downloads/game-linux.tar.gz">Download for Linux</a>
+                    <a href="/downloads/OrbCombat.apk" download>Download APK</a>
+                    <a href="https://github.com/Cascachu/OrbCombat/releases">Open on Github</a>
+
                 </div>
             </section>
 
@@ -62,6 +73,7 @@ export default function Home() {
                 <nav>
                     <a href="/privacy">Privacy Policy</a>
                     <a href="/terms">Terms of Service</a>
+                    <a href="https://github.com/Cascachu/OrbCombatWebPage">Github</a>
                 </nav>
             </footer>
 
